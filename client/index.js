@@ -125,7 +125,6 @@ function addNode(chart_id_index,expand_type){
         HTMLid: node_id
     };
     explore_views[curr_sheet_num-1].tree.addNode(parent_info, new_node_info);
-    console.log(explore_views)
     parent_info.collapsed=false
     //change color
     $('#'+node_id).css({'background-color':node_selected_color});
@@ -1672,31 +1671,9 @@ $(document).ready(function(){
 
     ///////////////// Add to gen poster ////////////////////
     $('#gen_poster').click(function(){
-        console.log(tree_structures);
-        console.log(chart_datas);
-        var form = document.createElement("form");
-            form.setAttribute("method", "post");
-            form.setAttribute("action", "poster.html");
-            form.setAttribute("target", "Poster");
-        var params = {'data':JSON.stringify(chart_datas)}
-            for (var i in params) {
-                if (params.hasOwnProperty(i)) {
-                    var input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = i;
-                    input.value = params[i];
-                    form.appendChild(input);
-                }
-            }
-            
-            document.body.appendChild(form);
-            
-            //note I am using a post.htm page since I did not want to make double request to the page 
-            //it might have some Page_Load call which might screw things up.
-            window.open("poster.html", "Poster", "width=800,height=600,left=100,top=100,resizable=yes,scrollbars=yes");
-            
-            form.submit();
-
-            document.body.removeChild(form);
+        document.getElementsByClassName('mask')[0].style.display="block";
     })
 })
+function Finish(){
+    document.getElementsByClassName('mask')[0].style.display="none";
+}
