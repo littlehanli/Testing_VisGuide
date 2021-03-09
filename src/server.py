@@ -366,7 +366,7 @@ def get_seq_data():
         
         if len(data)>0:
             node = {
-                #############Tammy update################
+                #############Tammy Update####################
                 #'innerHTML': list(data.keys())[0],
                 'innerHTML':"root",
                 'pseudo': True,

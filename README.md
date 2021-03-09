@@ -17,4 +17,3 @@ supporting story presentation and chart organization.
 
 ## Dataset
 [Download Datasets](https://drive.google.com/drive/folders/13CNfDDpSL_Lyk4QCw4QT9PAJfAulPEzh?usp=sharing)
-"# VisGuide2.0" 
