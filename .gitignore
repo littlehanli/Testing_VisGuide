@@ -1,0 +1,5 @@
+data/
+result analysis/*.xlsx
+src/result/
+src/model/user
+src/TR_data
