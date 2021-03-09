@@ -269,8 +269,8 @@ def get_vis_rec():
         type1_visRec,type2_visRec = VisRecommendation.getVisRec(par_vizs,userSelectedInsight,enumerateVizs,model,tree_vizs)
         
         # Store vis rec for result analysis
-        tool.save_dill(type1_visRec,'candVis\\type1_visRec')
-        tool.save_dill(type2_visRec,'candVis\\type2_visRec')
+        #tool.save_dill(type1_visRec,'candVis\\type1_visRec')
+        #tool.save_dill(type2_visRec,'candVis\\type2_visRec')
 
 
         data['type1'] = [getChartData(vis,rank=i+1) for i,vis in enumerate(type1_visRec)]

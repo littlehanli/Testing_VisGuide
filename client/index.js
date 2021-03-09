@@ -441,7 +441,7 @@ function drawChart(chart_data,canvas_id,chart_id=""){
     // create chart data 
     chart_type = chart_data.type
     ////////////////// Tammy Update ///////////////
-    if(curr_dataset=="COVID"){
+    if(curr_dataset=="Covid"){
         if(Object.getOwnPropertyNames(chart_data.filters).length!=0){
             if(chart_data.filters["Country/Region"].includes("Italy")){
                 var idx = chart_data.labels.indexOf("05/14")
@@ -465,6 +465,12 @@ function drawChart(chart_data,canvas_id,chart_id=""){
 
                 var idx = chart_data.labels.indexOf("07/29")
                 chart_data.datas[0].data[idx] = 49982
+
+                var idx = chart_data.labels.indexOf("09/14")
+                chart_data.datas[0].data[idx] = 73930
+
+                var idx = chart_data.labels.indexOf("09/15")
+                chart_data.datas[0].data[idx] = 73933
             }
         }
 
