@@ -8,8 +8,8 @@
     display:none;
 }
 .poster{
-    width:1000px;
-    height:600px;
+    width:1500px;
+    height:1000px;
     background: rgba(255, 255, 255, 1.0);
     white-space: pre-line;
     margin:200px auto 0px auto;
@@ -19,7 +19,7 @@
     padding: 20px;
 }
 .poster button{
-    background-color: #66CCFF;
+    background-color: "#3e95cd";
     border-radius: 10px;
     width:120px;
     font-size:20px;

@@ -16,7 +16,7 @@ function sheetContainer(curr_dataset,curr_sheet_num){
 
     // set explore view
     var exp_container = document.createElement("div")
-    setAttributes(exp_container,{"id":"exp_container","style":"float:left;overflow:auto;margin-top:-70%;zoom: 1; vertical-align: down; width:20%; height:20%;"})
+    setAttributes(exp_container,{"id":"exp_container","style":"float:left;overflow:auto;margin-top:-51.5%;zoom: 1; vertical-align: down; width:12%; height:20%;"})
 
     var explore_view_id = 'explore_view_'+curr_sheet_num
     var explore_view = document.createElement("div")

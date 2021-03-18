@@ -96,53 +96,80 @@ function addAnnotation(){
 ////////////////////////////////////////////////////////////////////////////
 
 function addNode(chart_id_index,expand_type){
-    //create tree_structure data
-    var tree_structure = {}
-    
     //dynamic add node   
-    var num = main_chart_id.substring(8)
-    var parent_node = $('#node_'+num)
-    if(parent_node.length==0){ //是第一張圖
-        parent_node = $('#root')
-        var parent_id = "#seq_root"
-    }else{
-        var parent_id = '#a_chart_'+num
+    
+    //create tree_structure data
+    // udpate the tree structure exist
+    var tree_structure = {}
+    child_id = '#a_chart_'+chart_id_index
+
+    if(tree_structures[curr_dataset].hasOwnProperty(curr_sheet_num-1)){ 
         tree_structure = tree_structures[curr_dataset][curr_sheet_num-1]
-    }
+ 
+        // find parent node
+        if(chart_datas[curr_dataset]["a_chart_"+chart_id_index.toString()].expandType=="1"){
+            //drill down chart
+            var num = chart_datas[curr_dataset]["a_chart_"+chart_id_index.toString()].parent_chart_id.substring(8)
+            var parent_node = $('#node_'+num)
+            var parent_id = '#a_chart_'+num
+
+            tree_structure[parent_id].push(child_id)
+        }else{
+            // comparison chart
+            // find the grandparent_id in tree sturcture
+            var parent_node = $('#root')
+            var parent_id = "#seq_root"
+
+            if(chart_datas[curr_dataset]["a_chart_"+chart_id_index.toString()].hasOwnProperty("parent_chart_id")){
+                // if not first chart
+                var par_id = "#"+chart_datas[curr_dataset]["a_chart_"+chart_id_index.toString()].parent_chart_id
+                Object.keys(tree_structure).forEach(function(grandParent){
+                    if(tree_structure[grandParent].includes(par_id)){
+                        parent_id = grandParent
+                        parent_node =  $('#node_'+ grandParent.substring(9))
+                        
+                    }
+                })
+                if(parent_id != "#seq_root"){
+                    var idx = tree_structure[parent_id].indexOf(par_id)
+                    tree_structure[parent_id].splice(idx+1,0,child_id) 
+                }
+            }
+        }
+        tree_structure[child_id] = []
+        /*else{
+             tree_structure[child_id] = []
+        }*/
+ 
+    }else{
+        var parent_node = $('#root')
+        var parent_id = "#seq_root"
+        tree_structure[child_id]=[] // child node 
+        tree_structures[curr_dataset][curr_sheet_num-1]=tree_structure
+    }   
+    
+    // add new Node
     var parent_info = parent_node.data('treenode');
     var node_id = "node_"+chart_id_index
     
+    // node color
     var node_color="the-parent"
     if(expand_type=="1"){
         node_color="the-parent con_drill"
     }else if(expand_type=="2"){
         node_color="the-parent con_comparison"
     }
-    
-    //new node info
+
     var new_node_info = { 
         HTMLclass: node_color, 
         HTMLid: node_id
     };
     explore_views[curr_sheet_num-1].tree.addNode(parent_info, new_node_info);
     parent_info.collapsed=false
+    
     //change color
     $('#'+node_id).css({'background-color':node_selected_color});
     $('#'+node_id).addClass("selected")
-
-    
-    child_id = '#a_chart_'+chart_id_index
-    
-    if(parent_id != "#seq_root"){
-        if(Object.keys(tree_structure).length!=0){
-            tree_structure[parent_id].push(child_id)
-        }else{
-            tree_structure[parent_id] = [child_id]
-        }
-    }
-    
-    tree_structure[child_id]=[] // child node 
-    tree_structures[curr_dataset][curr_sheet_num-1]=tree_structure
 
     //check if the node is selected. only show the node which is selected
     updateSeqViewByExloreView()
@@ -171,9 +198,66 @@ function updateSeqViewByExloreView(new_tree_structure = false){
     // 2.draw tree in sequence view
 
     // recreate the tree_structure to split the "comparison" chart
-    var updated_tree_structure = {}
-    var drill_tree_structure = {}
-    var comparison_tree_structure = {}
+        //var updated_tree_structure = new_tree_structure
+        new_tree_structure["root"] = []
+
+        var drill_tree_structure = {}
+        var comparison_tree_structure = {}
+    
+        // root child
+        Object.keys(new_tree_structure).forEach(function(child_id){
+            if(child_id!= "root"){
+                isRoot = true
+    
+                Object.keys(new_tree_structure).forEach(function(par_id){
+                    if(isRoot && par_id!="root" && child_id!="root" && new_tree_structure[par_id].includes(child_id)){
+                        isRoot = false
+                    }
+                }) 
+                if(isRoot) new_tree_structure["root"].push(child_id)
+            }
+            
+        })
+        
+    
+    
+        if(Object.keys(new_tree_structure).length>0){
+            Object.keys(new_tree_structure).forEach(function(child_id,index){
+                // create drill down tree_structure, for drawing connectors
+                if(index!=0 && child_id!="root"){
+                    var chart = chart_datas[curr_dataset][child_id.substring(1)]
+                    var parent_id = "#"+chart.parent_chart_id
+                    
+                    if(chart.expandType == "1"){
+                        if(!drill_tree_structure.hasOwnProperty(parent_id)){
+                            drill_tree_structure[parent_id] = []
+                        }
+                        drill_tree_structure[parent_id].push(child_id)
+                        drill_tree_structure[child_id] = []
+    
+                    }else if (chart.expandType == "2"){
+                        if(!comparison_tree_structure.hasOwnProperty(parent_id)){
+                            comparison_tree_structure[parent_id] = []
+                        }
+                        comparison_tree_structure[parent_id].push(child_id)
+                        comparison_tree_structure[child_id] = []
+                    }
+                }
+            })
+        }
+    
+        // create comparison tree structure , for drawing connectors
+        temp = {}
+        Object.keys(comparison_tree_structure).forEach(function(parent_id){
+            array = [parent_id].concat(comparison_tree_structure[parent_id])
+            array.forEach(function(id,i){
+                if(i+1<array.length){
+                    temp[id] = [array[i+1]]    
+                }
+            })
+        })
+        comparison_tree_structure = temp
+    /*
     if(Object.keys(new_tree_structure).length>0){
         updated_tree_structure = {root:[Object.keys(new_tree_structure)[0]]}
         
@@ -234,10 +318,11 @@ function updateSeqViewByExloreView(new_tree_structure = false){
             })
         })
         comparison_tree_structure = temp
-    }
+    }*/
     
     seq_data={}
-    seq_data.data=updated_tree_structure
+    //seq_data.data=updated_tree_structure
+    seq_data.data=new_tree_structure
 
     $.ajax({
         type: 'POST',
@@ -472,7 +557,22 @@ function drawChart(chart_data,canvas_id,chart_id=""){
                 chart_data.datas[0].data[idx] = 73933
             }
         }
-
+    }
+    if(curr_dataset=="AQ"){
+        if(Object.getOwnPropertyNames(chart_data.filters).length==0){
+            if(chart_data.x == "month"){
+                if(chart_data.y == "PM2.5(ug/m3)(avg)"){
+                    var idx = chart_data.labels.indexOf(3)
+                    chart_data.datas[0].data[idx] = 28.1
+                    chart_data.insights = {3:"max",6:"min"}
+                }
+                if(chart_data.y == "NO2(ppb)(avg)"){
+                    var idx = chart_data.labels.indexOf(3)
+                    chart_data.datas[0].data[idx] = 17.3
+                    chart_data.insights = {3:"max",7:"min"}
+                }
+            }
+        }
     }
 
     if(chart_type == "bar"){
@@ -1666,14 +1766,24 @@ $(document).ready(function(){
             //add new chart
             addChart2Tree(responce)
         });
-       
     })
 
     ///////////////// Add to gen poster ////////////////////
     $('#gen_poster').click(function(){
-        document.getElementsByClassName('mask')[0].style.display="block";
+        //document.getElementsByClassName('mask')[0].style.display="block";
+        screenshot();
     })
 })
 function Finish(){
     document.getElementsByClassName('mask')[0].style.display="none";
+}
+function screenshot(){
+    html2canvas(document.getElementById('seq_view_1')).then(function(canvas) {
+        document.body.appendChild(canvas);
+        var a = document.createElement('a');
+        a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        a.download = 'image.png';
+        a.click();
+        document.body.removeChild(canvas)
+    });
 }
