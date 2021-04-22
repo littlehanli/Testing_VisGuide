@@ -8,6 +8,7 @@ import Utility
 
 tool.init() # read data,calculate data informations
 dataInfos = tool.dataInfos
+
 train_X = []
 train_y = []
 model = None
@@ -469,6 +470,18 @@ def enumerate_charts():
     data ={}
     rst = jsonify(data)   
     rst.headers.add('Access-Control-Allow-Origin', '*')
+    return rst,200
+
+############### VisGuide 2.0 ################
+@app.route('/get_taiwan_map',methods=['GET','POST'])
+def get_taiwan_map():
+    print("---server/get_taiwan_map")
+    if request.method == 'POST':
+        taiwan_map= tool.getTaiwanMap()
+        
+    rst = jsonify(taiwan_map)   
+    rst.headers.add('Access-Control-Allow-Origin', '*')
+
     return rst,200
 
 if __name__ == "__main__":

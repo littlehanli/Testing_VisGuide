@@ -25,7 +25,7 @@ function sheetContainer(curr_dataset,curr_sheet_num){
                                         "; width:" + exploration_view_width +
                                         "; border:" + exploration_view_border +
                                         "; border-radius:" + exploration_view_border_radius + 
-                                        "; display:block;"})
+                                        "; display:none;"})
     
     // set sequence view
     var seq_view_id = 'seq_view_'+curr_sheet_num

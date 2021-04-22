@@ -44,11 +44,7 @@ function addChart2Tree(chart_data){
     //cal new chart info index
     ++global_chart_id
     var chart_id = "a_chart_".concat(global_chart_id.toString());
-    //console.log(chart_data)
-    //console.log(chart_data['filters'])
-    //console.log(chart_data['insights'])
-    //console.log(chart_data["x"]+","+chart_data["y"])
-
+    
     //update all chart data
     chart_datas[curr_dataset][chart_id] = chart_data
     
@@ -66,34 +62,7 @@ function addChart2Tree(chart_data){
     
     //update explore view
     addNode(global_chart_id.toString(),chart_data.expandType)
-
-    //update annotation
-    //annotation(chart_id)
 }
-/////////////////// add Annotation /////////////////////
-var annotation_html = []
-function annotation(chart_id){
-    
-    console.log(curr_dataset,chart_id,global_chart_id)
-    var x = chart_datas[curr_dataset][chart_id]['x']
-    var y = chart_datas[curr_dataset][chart_id]['y']
-    var max = getKeyByValue(chart_datas[curr_dataset][chart_id]['insights'],"max",x)
-    var min = getKeyByValue(chart_datas[curr_dataset][chart_id]['insights'],"min",x)
-
-    var filters = getAllFilters(chart_datas[curr_dataset][chart_id]['filters'])
-    var text = filters + " " + y +" has max value at " + max + " and min value at " + min + "."
-
-    annotation_html.push("<p>" + text + "<\p>")
-    addAnnotation();
-}
-/*
-function addAnnotation(){
-    var annotation_div = document.getElementById('annotation_view_'+curr_sheet_num)
-    annotation_div.innerHTML = "";
-    annotation_html.forEach(item => annotation_div.innerHTML += item)
-}
-*/
-////////////////////////////////////////////////////////////////////////////
 
 function addNode(chart_id_index,expand_type){
     //dynamic add node   
@@ -136,11 +105,7 @@ function addNode(chart_id_index,expand_type){
                 }
             }
         }
-        tree_structure[child_id] = []
-        /*else{
-             tree_structure[child_id] = []
-        }*/
- 
+        tree_structure[child_id] = [] 
     }else{
         var parent_node = $('#root')
         var parent_id = "#seq_root"
@@ -218,9 +183,7 @@ function updateSeqViewByExloreView(new_tree_structure = false){
             }
             
         })
-        
-    
-    
+
         if(Object.keys(new_tree_structure).length>0){
             Object.keys(new_tree_structure).forEach(function(child_id,index){
                 // create drill down tree_structure, for drawing connectors
@@ -257,68 +220,6 @@ function updateSeqViewByExloreView(new_tree_structure = false){
             })
         })
         comparison_tree_structure = temp
-    /*
-    if(Object.keys(new_tree_structure).length>0){
-        updated_tree_structure = {root:[Object.keys(new_tree_structure)[0]]}
-        
-        Object.keys(new_tree_structure).forEach(function(parent_id){
-            var children = new_tree_structure[parent_id].filter(function(child_id){
-                if (chart_datas[curr_dataset][child_id.substring(1)].expandType == "1"){
-                    return child_id
-                }else{
-                    // create comparison tree structure , for drawing connectors
-                    if(!comparison_tree_structure.hasOwnProperty(parent_id)){
-                        comparison_tree_structure[parent_id] = []
-                    }
-                    comparison_tree_structure[parent_id].push(child_id)
-                }    
-            })
-            
-            // create update_tree_strucure, for drawing the tree nodes
-            updated_tree_structure[parent_id] = children 
-            
-            // create drill down tree_structure, for drawing connectors
-            drill_tree_structure[parent_id] = $.extend(true, [], children);
-        })
-
-        // insert the comparison chart to the parent 
-        Object.keys(comparison_tree_structure).forEach(function(parent_id){
-            if(chart_datas[curr_dataset][parent_id.substring(1)].expandType!="2"){
-                grand_parent_chart_id = chart_datas[curr_dataset][parent_id.substring(1)].parent_chart_id
-                
-            }else{
-                //find grand_parent if the parent is not a drill down chart
-                isComparison = false
-                par_id = parent_id.substring(1)
-                while(!isComparison && par_id){   
-                    if (chart_datas[curr_dataset][par_id].expandType!="2"){
-                        isComparison = true
-                    }else{
-                        par_id = chart_datas[curr_dataset][par_id].parent_chart_id
-                    }
-                }
-                grand_parent_chart_id = (par_id)? chart_datas[curr_dataset][par_id].parent_chart_id : undefined
-                
-            }
-            grand_parent_chart_id = (grand_parent_chart_id!=undefined)? "#"+grand_parent_chart_id: "root"
-            children_id = comparison_tree_structure[parent_id]
-            parent_id_index = updated_tree_structure[grand_parent_chart_id].indexOf(parent_id)
-            updated_tree_structure[grand_parent_chart_id].splice(parent_id_index+1,0,...children_id)    
-            
-        })
-
-        // create comparison tree structure , for drawing connectors
-        temp = {}
-        Object.keys(comparison_tree_structure).forEach(function(parent_id){
-            array = [parent_id].concat(comparison_tree_structure[parent_id])
-            array.forEach(function(id,i){
-                if(i+1<array.length){
-                    temp[id] = [array[i+1]]    
-                }
-            })
-        })
-        comparison_tree_structure = temp
-    }*/
     
     seq_data={}
     //seq_data.data=updated_tree_structure
@@ -597,9 +498,6 @@ function drawChart(chart_data,canvas_id,chart_id=""){
     if(Object.keys(update_data)!=0){
         if(options.hasOwnProperty("scales")){
             // update multiple axes
-            //if(options.scales.yAxes.length>1){
-            //    options.scales.yAxes[1].display = update_data.multiple_yAxes  
-            //}
             if(options.multiYAxes <= 0 && chart_data.datas.length > 1){
                 if(update_data.multiple_yAxes==false){
                     options.scales.yAxes = Object.assign([],myChart.options.scales.close_yAxes);
@@ -846,10 +744,22 @@ function getVisRec(chart_index,click_item,chart_id){
 
         //get all chart_index in the tree
         chart_indices = Object.keys(tree_structures[curr_dataset][curr_sheet_num-1]).map(function(chart_id){
-            chart_id = chart_id.substring(1) + "-clone"
-            canvas_id = $("#"+chart_id).find("canvas")[0].id
-            return document.getElementById(canvas_id).getAttribute("data-chartIndex")
+            if(chart_id !== "root"){
+                chart_id = chart_id.substring(1) + "-clone"
+                canvas_id = $("#"+chart_id).find("canvas")[0].id
+                return document.getElementById(canvas_id).getAttribute("data-chartIndex")
+            }
         })
+        Array.prototype.clean = function(deleteValue) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i] == deleteValue) {         
+                this.splice(i, 1);
+                i--;
+                }
+            }
+            return this;
+        };
+        chart_indices.clean(undefined);
 
         //request data
         var chart_info = {}
@@ -1077,11 +987,7 @@ function onRedHeartBtnClick(){
 function onCloseChart(){
     // detect chart_id
     var chart_id = "#" + $(this).parents('.seq_chart_container')[0].id.split("-")[0]
-    //////////////// delete annotation //////////////////
-    /*
-    annotation_html[chart_id.split("_")[2]-1] = ""
-    addAnnotation()
-    */
+
     // update tree structure
     var exclude_chart_id  = [chart_id]
     var old_tree_structure = tree_structures[curr_dataset][curr_sheet_num-1]
@@ -1125,6 +1031,8 @@ function onCloseChart(){
     })
     
     tree_structures[curr_dataset][curr_sheet_num-1] = new_tree_structure
+
+
 }
 
 
@@ -1362,7 +1270,7 @@ function clean(){
     document.getElementById('init').style.display="block"
     document.getElementById('add_a_chart_card').style.visibility = "hidden"
     ///////////////// Add to gen poster ////////////////////
-    document.getElementById('gen_poster').style.visibility = "hidden"
+    document.getElementById('gen_poster_btn').style.visibility = "hidden"
 
     //clean rec 
     cleanRecCanvas()
@@ -1697,7 +1605,7 @@ $(document).ready(function(){
           document.getElementById('add_a_chart_card').style.visibility = "hidden"
           
           ///////////////// Add to gen poster ////////////////////
-          document.getElementById('gen_poster').style.visibility = "hidden"
+          document.getElementById('gen_poster_btn').style.visibility = "hidden"
   
           // add new sheet
           sheet_num++
@@ -1752,7 +1660,7 @@ $(document).ready(function(){
         document.getElementById('init').style.display = "none"
         document.getElementById('add_a_chart_card').style.visibility = "hidden"
         ///////////////// Add to gen poster ////////////////////
-        document.getElementById('gen_poster').style.visibility = "visible"
+        document.getElementById('gen_poster_btn').style.visibility = "visible"
         
         $.ajax({
             type: 'POST',
@@ -1769,14 +1677,11 @@ $(document).ready(function(){
     })
 
     ///////////////// Add to gen poster ////////////////////
-    $('#gen_poster').click(function(){
-        //document.getElementsByClassName('mask')[0].style.display="block";
+    $('#gen_poster_btn').click(function(){
         screenshot();
     })
 })
-function Finish(){
-    document.getElementsByClassName('mask')[0].style.display="none";
-}
+
 function screenshot(){
     html2canvas(document.getElementById('seq_view_1')).then(function(canvas) {
         document.body.appendChild(canvas);

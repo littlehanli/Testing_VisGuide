@@ -22,6 +22,9 @@ dataInfos_path = "dataInfos" #pre stored visualizations
 Vis_index_path = "vis_index" 
 dataInfos = dataInfos_help.dataInfos
 
+############### VisGuide 2.0 ################
+mapInfos = dataInfos_help.mapInfos
+
 #aggregate
 aggregates = {'sum','avg','cnt'}
 globalAggre = {'per'} # 要加none
@@ -449,3 +452,9 @@ def init(data=None):
             setDataInfos()
     else:
         setDataInfos()
+
+############### VisGuide 2.0 ###############
+def getTaiwanMap():
+    taiwan_map = readFile(mapInfos['Taiwan']['readFilePath'])
+    return taiwan_map
+    

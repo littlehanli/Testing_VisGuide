@@ -92,3 +92,10 @@ dataInfos={
         'y_default':'Confirmed',
     } 
 }
+
+################## VisGuide 2.0 ######################
+mapInfos = {
+    'Taiwan':{
+        'readFilePath' : '..\\data\\mapdata\\COUNTY_MOI_1090820.json', 
+    }
+}
