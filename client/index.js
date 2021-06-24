@@ -1603,10 +1603,10 @@ $(document).ready(function(){
           //show "init" div 
           document.getElementById('init').style.display="block"
           document.getElementById('add_a_chart_card').style.visibility = "hidden"
-          
+
           ///////////////// Add to gen poster ////////////////////
           document.getElementById('gen_poster_btn').style.visibility = "hidden"
-  
+
           // add new sheet
           sheet_num++
           var sheet_id = "Sheet_" + sheet_num
@@ -1678,17 +1678,7 @@ $(document).ready(function(){
 
     ///////////////// Add to gen poster ////////////////////
     $('#gen_poster_btn').click(function(){
-        screenshot();
+        console.log(chart_datas[curr_dataset])
+        console.log(chart_objects)
     })
 })
-
-function screenshot(){
-    html2canvas(document.getElementById('seq_view_1')).then(function(canvas) {
-        document.body.appendChild(canvas);
-        var a = document.createElement('a');
-        a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        a.download = 'image.png';
-        a.click();
-        document.body.removeChild(canvas)
-    });
-}

@@ -467,6 +467,7 @@ function titleDiv(chart_data){
             
             if(i<labels.length-1)   title_name += ", "
         }
+        title_name += " (" + x_ + ")"
     }
     text.innerHTML = title_name
     text.innerHTML = (text.innerHTML.length>40)? text.innerHTML.substring(0,40)+"..." : text.innerHTML
