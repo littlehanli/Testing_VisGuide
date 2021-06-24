@@ -19,7 +19,7 @@
 ## Demo
 * Download dataset and put in new directory "data"
 * Run "python server.py" in directory "src"
-* Fix the path of "index.html" in *__Test.java
+* Fix the path of "index.html" in __Test.java
 * Run test files (ISPTest.java, GraphTest.java, LogicTest.java) to automatically testing on browser 
 
 
