@@ -3,6 +3,15 @@
 * Test on VisGuide
 * InputSpace / Graph Coverage Test
 * Source code: python + flask / javascript
+* Testing Tool: IntelliJ IDEA / JUnit - 4.11 / Selenium - 4.0.0-beta-2
+
+## Test Coverage
+* Input Space Partition Coverage
+  * Each Choice Coverage
+* Graph Coverage
+  * Edge Pair Coverage
+* Logic Coverage
+  * Correlated Active Clause Coverage
 
 
 ## Original Project
