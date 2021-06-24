@@ -18,7 +18,7 @@
 
 ## Demo
 * Download dataset and put in new directory "data"
-* Run "python src/server.py"
+* Run "python server.py" in directory "src"
 * Run test files (ISPTest.java, GraphTest.java, LogicTest.java) to automatically testing on browser 
 
 
