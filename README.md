@@ -8,10 +8,18 @@
 ## Test Coverage
 * Input Space Partition Coverage
   * Each Choice Coverage
+  * Total 5 test cases
 * Graph Coverage
   * Edge Pair Coverage
+  * Total 2 test cases
 * Logic Coverage
   * Correlated Active Clause Coverage
+  * Total 7 test cases
+
+## Demo
+* Download dataset and put in new directory "data"
+* Run "python src/server.py"
+* Run test files (ISPTest.java, GraphTest.java, LogicTest.java) to automatically testing on browser 
 
 
 ## Original Project
